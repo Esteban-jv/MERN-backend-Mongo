@@ -7,7 +7,7 @@ import checkAuth from '../middleware/checkAuth.js'
 
 // Creación, autenticación y confirmación de usuarios
 //router.get('/', users);
-router.post('/', createUser);
+router.post('/createaccount', createUser);
 router.post('/login', autenticar);
 router.get('/confirmar/:token',confirm)
 router.post('/forgot-password',requirePassword);

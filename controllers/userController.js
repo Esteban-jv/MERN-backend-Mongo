@@ -27,7 +27,9 @@ const createUser = async (req, res) => {
         const user = new User(req.body);
         user.token = generarId();
         const userStored = await user.save();
-        return res.json(userStored)
+        return res.json({
+            user: userStored
+        })
     } catch (error) {
         return res.json(error)
     }
@@ -35,10 +37,10 @@ const createUser = async (req, res) => {
 
 const autenticar = async (req, res) => {
 
-    const { email, password } = req.body;
+    const { username, password } = req.body;
     //Comprobar que el usuario existe
 
-    const usuario = await User.findOne({email});
+    const usuario = await User.findOne({username});
     if(!usuario) {
         const error = new Error("El usuario no existe");
         return res.status(404).json({ msg: error.message });
@@ -54,10 +56,12 @@ const autenticar = async (req, res) => {
     if(await usuario.checkPassowrd(password))
     {
         res.json({
-            _id: usuario._id,
-            nombre: usuario.nombre,
-            email: usuario.email,
-            token: genJWT(usuario._id)
+            user: {
+                _id: usuario._id,
+                name: usuario.name,
+                email: usuario.email,
+                token: genJWT(usuario._id)
+            }
         })
     }
     else
